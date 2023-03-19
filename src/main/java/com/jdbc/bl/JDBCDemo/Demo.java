@@ -34,8 +34,7 @@ public class Demo {
 						"\nDepartment:"+result.getString(4)+
 						"\nGender:"+result.getString(5)+
 						"\nAddress:"+result.getString(6)+
-						"\nBasicPay:"+result.getString(7));
-				System.out.println(
+						"\nBasicPay:"+result.getString(7)+
 						"\nDeductions:"+result.getString(8)+
 						"\nTaxablePay:"+result.getString(9)+
 						"\nTax:"+result.getString(10)+
@@ -135,6 +134,42 @@ public class Demo {
 		}
 
 	}
+
+	public static void getDataByName() {
+
+		String name;
+		Scanner s = new Scanner(System.in);
+		System.out.print("Enter The Name : ");
+		name = s.next();
+
+		try {
+			Connection obj = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_service","root","T@eHyung143");
+			PreparedStatement ps1 = obj.prepareStatement("Select * from employee_payroll where name = ?");
+			ps1.setString(1,name);
+			ResultSet result = ps1.executeQuery();
+			while(result.next()){
+				System.out.println("Employee Id: "+result.getInt(1)+
+						"\nEmployee name: "+result.getString(2)+
+						"\nPhoneNumber:"+result.getString(3)+
+						"\nDepartment:"+result.getString(4)+
+						"\nGender:"+result.getString(5)+
+						"\nAddress:"+result.getString(6)+
+						"\nBasicPay:"+result.getString(7));
+				System.out.println(
+						"\nDeductions:"+result.getString(8)+
+						"\nTaxablePay:"+result.getString(9)+
+						"\nTax:"+result.getString(10)+
+						"\nNetPay:"+result.getString(11)+
+						"\nStartDate:"+result.getString(12));
+
+
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
@@ -144,7 +179,8 @@ public class Demo {
 				"\n-->press 3 to get list of Drivers"+
 				"\n-->Press 4 to update basic pay"+
 				"\n-->Press 5 to update Data"+
-				"\n--->Press 6 To Close The Database Connection<---");
+				"\n-->Press 6 to Get Data By Name"+
+				"\n--->Press 7 To Close The Database Connection<---");
 		int userinput=sc.nextInt();
 
 		switch(userinput) {
@@ -165,6 +201,9 @@ public class Demo {
 			updateData();
 			break;
 		case 6:
+			getDataByName();
+			break;
+		case 7:
 			closeConnection();
 			break;
 		default:
