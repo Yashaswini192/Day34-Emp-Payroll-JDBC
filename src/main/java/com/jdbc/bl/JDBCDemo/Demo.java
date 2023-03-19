@@ -210,6 +210,118 @@ public class Demo {
 
 	}
 
+
+	public static void getSalaryCalculationByGender() {
+
+		String gender;
+		ResultSet resultSet;
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter Gender : ");
+		gender = sc.next();
+
+		System.out.println(" To Get Sum Of The Basic Pay Press 1" +
+				"\n To Get The AVG of Basic Pay Press 2" +
+				"\n To Get MIN Basic Pay Press 3" +
+				"\n To Get MAX Basic Pay Press 4" +
+				"\n To Get The Count Press 5" +
+				"\n To Return To The Main Menu Press 6\n");
+		System.out.print("Choice :");
+		int userInput = sc.nextInt();
+
+		switch (userInput){
+
+		case 1: {
+			try {
+				Connection obj = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_service","root","T@eHyung143");
+				PreparedStatement ps = obj.prepareStatement("select sum(basic_pay) from employee_payroll where gender = ? group by gender;");
+				ps.setString(1,gender);
+				resultSet = ps.executeQuery();
+				while (resultSet.next()){
+					System.out.println("Value : " + resultSet.getInt(1));
+				}
+				getSalaryCalculationByGender();
+
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+			break;
+		}
+
+		case 2: {
+			try {
+				Connection obj = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_service","root","T@eHyung143");
+				PreparedStatement ps = obj.prepareStatement("select avg(basic_pay) from employee_payroll where gender = ? group by gender;");
+				ps.setString(1,gender);
+				resultSet = ps.executeQuery();
+				while (resultSet.next()){
+					System.out.println("Value : " + resultSet.getInt(1));
+				}
+				getSalaryCalculationByGender();
+
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+			break;
+
+		}
+
+		case 3: {
+			try {
+				Connection obj = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_service","root","T@eHyung143");
+				PreparedStatement ps = obj.prepareStatement("select min(basic_pay) from employee_payroll where gender = ? group by gender;");
+				ps.setString(1,gender);
+				resultSet = ps.executeQuery();
+				while (resultSet.next()){
+					System.out.println("Value : " + resultSet.getInt(1));
+				}
+				getSalaryCalculationByGender();
+
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+			break;
+		}
+
+		case 4 : {
+			try {
+				Connection obj = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_service","root","T@eHyung143");
+				PreparedStatement ps = obj.prepareStatement("select max(basic_pay) from employee_payroll where gender = ? group by gender;");
+				ps.setString(1,gender);
+				resultSet = ps.executeQuery();
+				while (resultSet.next()){
+					System.out.println("Value : " + resultSet.getInt(1));
+				}
+				getSalaryCalculationByGender();
+
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+			break;
+		}
+
+		case 5: {
+			try {
+				Connection obj = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_service","root","T@eHyung143");
+				PreparedStatement ps = obj.prepareStatement("select count(basic_pay) from employee_payroll where gender = ? group by gender;");
+				ps.setString(1,gender);
+				resultSet = ps.executeQuery();
+				while (resultSet.next()){
+					System.out.println("Value : " + resultSet.getInt(1));
+				}
+				getSalaryCalculationByGender();
+
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+			break;
+		}
+		case 6 : {
+			break;
+		}
+		}
+
+
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
@@ -221,7 +333,8 @@ public class Demo {
 				"\n-->Press 5 to update Data"+
 				"\n-->Press 6 to Get Data By Name"+
 				"\n-->Press 7 to Get Data By Range"+
-				"\n--->Press 8 To Close The Database Connection<---");
+				"\n-->Press 8 to Get SalaryCalculation By Gender"+
+				"\n--->Press 9 To Close The Database Connection<---");
 		int userinput=sc.nextInt();
 
 		switch(userinput) {
@@ -248,6 +361,9 @@ public class Demo {
 			getByDateRange();
 			break;
 		case 8:
+			getSalaryCalculationByGender();
+			break;
+		case 9:
 			closeConnection();
 			break;
 		default:
