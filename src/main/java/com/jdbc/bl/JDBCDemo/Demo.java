@@ -155,8 +155,8 @@ public class Demo {
 						"\nGender:"+result.getString(5)+
 						"\nAddress:"+result.getString(6)+
 						"\nBasicPay:"+result.getString(7));
-				System.out.println(
-						"\nDeductions:"+result.getString(8)+
+				System.out.print(
+						"Deductions:"+result.getString(8)+
 						"\nTaxablePay:"+result.getString(9)+
 						"\nTax:"+result.getString(10)+
 						"\nNetPay:"+result.getString(11)+
@@ -170,6 +170,46 @@ public class Demo {
 		}
 
 	}
+
+	public static void getByDateRange() {
+
+		String startingDate;
+		String endingDate;
+		Scanner scan = new Scanner(System.in);
+		System.out.print("Enter The StartingDate : ");
+		startingDate = scan.next();
+		System.out.print("Enter The Ending Date : ");
+		endingDate = scan.next();
+
+		try {
+			Connection obj = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_service","root","T@eHyung143");
+
+			PreparedStatement  ps = obj.prepareStatement("select * from employee_payroll where start_Date between cast(? as date) and date (?)");
+			ps.setString(1, startingDate);
+			ps.setString(2,endingDate);
+			ResultSet result = ps.executeQuery();
+			while(result.next()){System.out.println("Employee Id: "+result.getInt(1)+
+					"\nEmployee name: "+result.getString(2)+
+					"\nPhoneNumber:"+result.getString(3)+
+					"\nDepartment:"+result.getString(4)+
+					"\nGender:"+result.getString(5)+
+					"\nAddress:"+result.getString(6)+
+					"\nBasicPay:"+result.getString(7));
+			System.out.print(
+					"Deductions:"+result.getString(8)+
+					"\nTaxablePay:"+result.getString(9)+
+					"\nTax:"+result.getString(10)+
+					"\nNetPay:"+result.getString(11)+
+					"\nStartDate:"+result.getString(12));
+
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
@@ -180,7 +220,8 @@ public class Demo {
 				"\n-->Press 4 to update basic pay"+
 				"\n-->Press 5 to update Data"+
 				"\n-->Press 6 to Get Data By Name"+
-				"\n--->Press 7 To Close The Database Connection<---");
+				"\n-->Press 7 to Get Data By Range"+
+				"\n--->Press 8 To Close The Database Connection<---");
 		int userinput=sc.nextInt();
 
 		switch(userinput) {
@@ -204,6 +245,9 @@ public class Demo {
 			getDataByName();
 			break;
 		case 7:
+			getByDateRange();
+			break;
+		case 8:
 			closeConnection();
 			break;
 		default:
