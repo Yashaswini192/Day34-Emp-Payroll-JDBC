@@ -104,6 +104,37 @@ public class Demo {
 		}
 
 	}
+
+	public static void updateData(){
+		String name;
+		int salary;
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter The Name : ");
+		name = sc.next();
+		System.out.print("Enter Salary : ");
+		salary = sc.nextInt();
+
+		try{
+			Connection obj = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_service","root","T@eHyung143");
+			PreparedStatement ps = obj.prepareStatement("update employee_payroll set basic_pay = ? where name = ?");
+			ps.setInt(1,salary);
+			ps.setString(2,name);
+			int update = ps.executeUpdate();
+
+
+			if (update > 0){
+				System.out.println("Data Successfully Updated : " + update + " Rows Updated");
+			}
+			else{
+				System.out.println("Data Not Added");
+			}
+		}
+		catch (Exception e){
+
+			System.out.println("Field Not Available");
+		}
+
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
@@ -111,8 +142,9 @@ public class Demo {
 		System.out.println("--->Press 1 to Connect With The Database<---" +
 				"\n--->Press 2 To Get Data From Database<---" +
 				"\n-->press 3 to get list of Drivers"+
-				"\n-->Press 4 to update data"+
-				"\n--->Press 5 To Close The Database Connection<---");
+				"\n-->Press 4 to update basic pay"+
+				"\n-->Press 5 to update Data"+
+				"\n--->Press 6 To Close The Database Connection<---");
 		int userinput=sc.nextInt();
 
 		switch(userinput) {
@@ -130,6 +162,9 @@ public class Demo {
 			updateContact();
 			break;
 		case 5:
+			updateData();
+			break;
+		case 6:
 			closeConnection();
 			break;
 		default:
