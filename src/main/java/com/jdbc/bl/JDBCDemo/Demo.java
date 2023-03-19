@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Enumeration;
+import java.util.Scanner;
 
 import com.mysql.cj.xdevapi.Statement;
 
@@ -19,24 +20,91 @@ public class Demo {
 			System.out.println( " "+obj2.getClass().getName());
 		}
 	}
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	public static void getData() {
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			System.out.println("driver loaded");
-		}catch(ClassNotFoundException e) {
-			throw new IllegalStateException("cannot find the driver in the classpath!", e);
-		}
-		try {		
-			Connection obj = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_service", "root", "T@eHyung143");		    
-			System.out.println("Connection with database is succesfull");
+			Connection obj = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_service","root","T@eHyung143");
+			PreparedStatement obj3 = obj.prepareStatement("select * from employee");
+			ResultSet result = obj3.executeQuery();
+			while(result.next()) {		
+				
+				System.out.println("Employee Id: "+result.getInt(1)+
+						"\nEmployee name: "+result.getString(2)+
+						"\nPhoneNumber:"+result.getString(3)+
+						"\nDepartment:"+result.getString(4)+
+						"\nGender:"+result.getString(5)+
+						"\nAddress:"+result.getString(6)+
+						"\nBasicPay:"+result.getString(7));
+				System.out.println(
+						"\nDeductions:"+result.getString(8)+
+						"\nTaxablePay:"+result.getString(9)+
+						"\nTax:"+result.getString(10)+
+						"\nNetPay:"+result.getString(11)+
+						"\nStartDate:"+result.getString(12));
+			
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
-		listDrivers();
-		
-	}
 
+	}
+	
+	public static void connectDatabase() {
+	try {
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		System.out.println("driver loaded");
+	}catch(ClassNotFoundException e) {
+		throw new IllegalStateException("cannot find the driver in the classpath!", e);
+	}
+	try {		
+		Connection obj = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_service", "root", "T@eHyung143");		    
+		System.out.println("Connection with database is succesfull");
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	}
+	public static void closeConnection(){
+
+		try {
+			Connection obj = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_service","root","T@eHyung143");
+			obj.close();
+			System.out.println("---Database Connection Closed---");
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		catch (NullPointerException np){
+			System.out.println("----Database Connection Never Started----");
+		}
+
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Scanner sc = new Scanner(System.in);
+		System.out.println("--->Press 1 to Connect With The Database<---" +
+				"\n--->Press 2 To Get Data From Database<---" +
+				"\n-->press 3 to get list of Drivers"+
+				"\n--->Press 4 To Close The Database Connection<---");
+		int userinput=sc.nextInt();
+
+		switch(userinput) {
+
+		case 1:
+			connectDatabase();	
+			break;
+		case 2:
+			getData();
+			break;
+		case 3:
+			listDrivers();
+			break;
+		case 4:
+			closeConnection();
+			break;
+		default:
+			System.out.println("cannot find database");
+		}
+	}
 }
